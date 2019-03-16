@@ -14,12 +14,20 @@ import 'plusMinus.dart';
 
 /// The function that is called when main.dart is run.
 void main() {
-  runApp(UnitConverterApp());
+  runApp(Calculator());
 }
 
 /// This widget is the root of our application.
 /// Currently, we just show one widget in our app.
-class UnitConverterApp extends StatelessWidget {
+class Calculator extends StatelessWidget {
+  TextEditingController m_resultTextController = new TextEditingController(
+    text: "",
+  );
+
+  //List with used operator (not allowed to have more than 1 operator after another)
+  final List<String> operatorList = ['+','-','*','/'];
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,20 +39,74 @@ class UnitConverterApp extends StatelessWidget {
         ),
         backgroundColor: Colors.green[100],
         body: GridView.count(
-          primary: false,
-          padding: const EdgeInsets.all(20.0),
-          crossAxisSpacing: 10.0,
-          crossAxisCount: 2,
-          children: <Widget>[ //List with different widgets
-            plusMinus(m_categoryName: "+",m_categoryColor: Colors.green,), //plus symbol
-            const Text('Heed not the rabble'),
-            const Text('Sound of screams but the'),
-            const Text('Who scream'),
-            const Text('Revolution is coming...'),
-            const Text('Revolution, they...'),
-          ]),
+            primary: false,
+            padding: const EdgeInsets.all(20.0),
+            crossAxisSpacing: 10.0,
+            crossAxisCount: 2,
+            children: <Widget>[
+              //List with different widgets
+        new TextField(
+          controller: m_resultTextController,
+          textAlign: TextAlign.center,
+        ),
+              plusMinus(
+                m_categoryName: "+",
+                m_categoryColor: Colors.green,
+                m_calc: this,
+              ), //plus symbol
+              const Text('Heed not the rabble'),
+              const Text('Sound of screams but the'),
+              const Text('Who scream'),
+              const Text('Revolution is coming...'),
+              const Text('Revolution, they...'),
+            ]),
       ),
     );
   }
 
+  /*
+  set the resultTerm Text
+   */
+  void setResultTextLabel(String textString) {
+
+    if(charIsAllowedInResultTextLabel(textString)){
+      textString =m_resultTextController.text + textString; //oold data and adding the new
+      print('setOutputLabel' + textString);
+      m_resultTextController.text = textString;
+    }
+  }
+
+  /*
+  check, if character of the mathematic term allowed to insert, e.g. is a operator (+,-,*,/)
+      yes- no new operator allowed
+      no   new operator allowed
+   */
+  bool charIsAllowedInResultTextLabel(String input) {
+    if(m_resultTextController.text.length==0){ //else excepton, when text field is empty
+      return true;
+    }
+
+    //debug output
+    operatorList.forEach((fruit) => print(fruit));
+    print('operator liste'+operatorList.length.toString());
+    //print( operatorList[1] ); // 2
+
+    String lastCharInput=input.substring(input.length-1,input.length);
+    print('lastCharInputsubstring' + lastCharInput);
+    print('operatorList index' + operatorList.indexOf(lastCharInput).toString());
+    if(operatorList.indexOf(lastCharInput)==-1){ //inserted char is no operator
+      return true;
+    }
+
+    //check, if last char of term is an operatpor
+    String lastCharTerm=input.substring(m_resultTextController.text.length-1,m_resultTextController.text.length);
+    print('substring' + lastCharTerm);
+    print('operatorList Termindex' + operatorList.indexOf(lastCharTerm).toString());
+    if(operatorList.indexOf(lastCharTerm)==-1){ //inserted char is no operator
+      return true;
+    }
+
+    print('last char is operator' + lastCharTerm);
+    return false;
+  }
 }
