@@ -21,15 +21,21 @@ void main() {
 /// Currently, we just show one widget in our app.
 class Calculator extends StatelessWidget {
   TextEditingController m_resultTextController = new TextEditingController(
-    text: "",
+    text: "test",
   );
 
   //List with used operator (not allowed to have more than 1 operator after another)
   final List<String> operatorList = ['+','-','*','/'];
+  final int maxCountCharsMathTerm=10; //max count of chars (numbers and operators in the mathematic term
+
 
 
   @override
   Widget build(BuildContext context) {
+    Container topSection = this.createTopSection();
+    Expanded middleSection = this.createMiddleSection();
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -38,29 +44,50 @@ class Calculator extends StatelessWidget {
           backgroundColor: Colors.amber,
         ),
         backgroundColor: Colors.green[100],
-        body: GridView.count(
-            primary: false,
-            padding: const EdgeInsets.all(20.0),
-            crossAxisSpacing: 10.0,
-            crossAxisCount: 2,
+        body:  Column(
             children: <Widget>[
-              //List with different widgets
-        new TextField(
-          controller: m_resultTextController,
-          textAlign: TextAlign.center,
-        ),
-              plusMinus(
-                m_categoryName: "+",
-                m_categoryColor: Colors.green,
-                m_calc: this,
-              ), //plus symbol
-              const Text('Heed not the rabble'),
-              const Text('Sound of screams but the'),
-              const Text('Who scream'),
-              const Text('Revolution is coming...'),
-              const Text('Revolution, they...'),
+              topSection,
+              middleSection,
             ]),
+
       ),
+    );
+  }
+
+  Container createTopSection(){
+    return Container(
+      child: new TextField( //TextField for the mathematic term
+        style: new TextStyle(
+          color: Colors.red,
+          fontSize: 25.0,
+        ),
+        enabled: false,
+        keyboardType: TextInputType.multiline,
+        maxLines: 2,
+        controller: m_resultTextController,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Expanded createMiddleSection(){
+    return new Expanded(child: GridView.count(
+        primary: false,
+        padding: const EdgeInsets.all(5.0),
+        crossAxisSpacing: 1.0,
+        crossAxisCount: 2,
+        children: <Widget>[
+        plusMinus(
+          m_categoryName: "+",
+          m_categoryColor: Colors.green,
+          m_calc: this,
+        ), //plus symbol
+        const Text('Heed not the rabble'),
+        const Text('Sound of screams but the'),
+        const Text('Who scream'),
+        const Text('Revolution is coming...'),
+        const Text('Revolution, they...'),
+        ]),
     );
   }
 
@@ -99,7 +126,7 @@ class Calculator extends StatelessWidget {
     }
 
     //check, if last char of term is an operatpor
-    String lastCharTerm=input.substring(m_resultTextController.text.length-1,m_resultTextController.text.length);
+    String lastCharTerm=m_resultTextController.text.substring(m_resultTextController.text.length-1,m_resultTextController.text.length);
     print('substring' + lastCharTerm);
     print('operatorList Termindex' + operatorList.indexOf(lastCharTerm).toString());
     if(operatorList.indexOf(lastCharTerm)==-1){ //inserted char is no operator
