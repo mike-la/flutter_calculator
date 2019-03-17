@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'main.dart';
 
-/// The widget for plus or minus
+/// The widget all buttons (numbers and operators)
 ///
 
-class plusMinus extends StatelessWidget {
+class buttons extends StatelessWidget {
   final String m_categoryName;
   final ColorSwatch m_categoryColor;
   double m_height;
@@ -15,7 +15,7 @@ class plusMinus extends StatelessWidget {
   // While the @required checks for whether a named parameter is passed in,
   // it doesn't check whether the object passed in is null. We check that
   // in the assert statement.
-  plusMinus({
+  buttons({
     Key key,
     @required this.m_categoryName,
     @required this.m_categoryColor,
@@ -28,15 +28,14 @@ class plusMinus extends StatelessWidget {
 
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
-    m_height=100.0;//context.size.height;
+    m_height=70.0;//context.size.height;
+    m_height=m_height/m_categoryName.length; //smaller, when more letters
 
     return Material(
 
         color: m_categoryColor,
-        child: new Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Container(
-              height: m_height+m_border,
+          child: new Center(
+
               child: new InkWell(
                 borderRadius: BorderRadius.circular(50.0),
                 highlightColor: m_categoryColor,
@@ -44,22 +43,15 @@ class plusMinus extends StatelessWidget {
                   print('I was tapped!');
                   tapped();
                 },
-                child: new Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    new Padding(
-                      padding: const EdgeInsets.all(16.0),
-                    ),
+                child:
                     new Center(
                         child: Text(
                           m_categoryName,
                           style: new TextStyle(fontSize:m_height ),
                           textAlign: TextAlign.center,
-                        ))
-                  ],
-                ),
+                        )),
               )),
-        ));
+        );
   }
 
   void tapped(){
